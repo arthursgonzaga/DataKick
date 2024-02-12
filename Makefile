@@ -5,6 +5,14 @@ REPO_URL := https://github.com/airbytehq/airbyte.git
 AIRBYTE_DIR := ./airbyte
 SOCCERHUB_DIR := ./soccerhub
 
+# All stack
+run-all:
+	make airbyte-run-all
+	make soccerhub-run-all
+
+stop-all:
+	make airbyte-stop
+	make soccerhub-stop
 
 # Airbyte
 airbyte-run-all:
@@ -25,9 +33,6 @@ airbyte-stop:
 
 # Soccerhub
 soccerhub-run-all:
-	make soccerhub-run
-
-soccerhub-run:
 	docker-compose -f $(SOCCERHUB_DIR)/docker-compose.yaml -p soccerhub up -d
 
 soccerhub-remove:
