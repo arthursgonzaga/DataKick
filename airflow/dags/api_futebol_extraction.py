@@ -37,10 +37,27 @@ def fetch_api_futebol_data():
             url = f"https://api.api-futebol.com.br/v1/campeonatos/{campeonato_id}/partidas"
             response = requests.get(url, headers=headers)
             response.raise_for_status()
-            # print(response.json())
             return response.json()
+        
+    @task
+    def load_json(data):
+        """
+        Load data into S3 or Minio
+        """
+        MINIO_BUCKET = "bronze"
+
+        # Save data to S3
+        s3 = S3Hook(aws_conn_id="minio_default")
+        file_name = "api_futebol/matches.json"
+        s3.load_string(
+            bucket_name=MINIO_BUCKET,
+            key=file_name,
+            string_data=json.dumps(data),
+            replace=True,
+        )
     
-    fetch_partidas(campeonatos)
+    response = fetch_partidas(campeonatos)
+    load_json(response)
 
 
 fetch_api_futebol_data()
