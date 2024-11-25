@@ -15,7 +15,7 @@ Ferramenta de abstração para storage que permite gerenciar arquivos de forma s
 3. Rodar esse comando:
 
     ```bash
-        docker run \
+        docker run -d \
         -p 9000:9000 \
         -p 9001:9001 \
         -v ./minio/data:/data \
