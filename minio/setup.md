@@ -18,10 +18,12 @@ Ferramenta de abstração para storage que permite gerenciar arquivos de forma s
         docker run -d \
         -p 9000:9000 \
         -p 9001:9001 \
+        --network airflow_c61614_airflow \
         -v ./minio/data:/data \
         -v ./.env:/etc/config.env \
         -e "MINIO_CONFIG_ENV_FILE=/etc/config.env" \
-        --name "minio" \
+        --add-host=minio.local:0.0.0.0 \
+        --name "minio_airflow" \
         quay.io/minio/minio server /data --console-address :9001
     ```
 
