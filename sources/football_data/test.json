@@ -1,0 +1,24 @@
+{
+  "filters": {
+    "limit": 1,
+    "offset": 0,
+    "competitions": "SA,CIT,CL,FL1",
+    "permission": "TIER_ONE",
+    "status": ["FINISHED"]
+  },
+  "resultSet": { "count": 0 },
+  "aggregations": "As this a CPU intensive operation, this is only available for paid subscriptions.",
+  "person": {
+    "id": 2019,
+    "name": "Gianluigi Buffon",
+    "firstName": "Gianluigi",
+    "lastName": "Buffon",
+    "dateOfBirth": "1978-01-28",
+    "nationality": "Italy",
+    "section": "Goalkeeper",
+    "position": null,
+    "shirtNumber": null,
+    "lastUpdated": "2023-07-30T17:08:52Z"
+  },
+  "matches": []
+}
