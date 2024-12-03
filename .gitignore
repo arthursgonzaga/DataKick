@@ -4,3 +4,7 @@
 # Airflow Itens
 airflow/logs/*
 airflow/plugins/*
+
+# Minio Data
+minio/data/*
+minio/credentials/*
