@@ -11,3 +11,6 @@ minio/credentials/*
 
 # Metabase Data
 metabase/metadata/*
+
+# DuckDB
+duckdb/*
