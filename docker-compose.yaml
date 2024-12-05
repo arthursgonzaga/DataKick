@@ -60,6 +60,7 @@ services:
 
   postgres:
     image: postgres:13-alpine
+    container_name: airflow-psql
     environment:
       POSTGRES_USER: airflow
       POSTGRES_PASSWORD: airflow
@@ -75,6 +76,7 @@ services:
 
   airflow-webserver:
     <<: *airflow-common
+    container_name: airflow-webserver
     command: webserver
     ports:
       - "8080:8080"
@@ -92,6 +94,7 @@ services:
 
   airflow-scheduler:
     <<: *airflow-common
+    container_name: airflow-scheduler
     command: scheduler
     healthcheck:
       test: ["CMD-SHELL", 'airflow jobs check --job-type SchedulerJob --hostname "$${HOSTNAME}"']
@@ -169,6 +172,7 @@ services:
 
   airflow-cli:
     <<: *airflow-common
+    container_name: airflow-cli
     profiles:
       - debug
     environment:
