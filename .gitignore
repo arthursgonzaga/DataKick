@@ -1,5 +1,7 @@
 .DS_Store
 .env
+*.pyc
+__pycache__
 
 # Airflow Itens
 airflow/logs/*
@@ -11,3 +13,6 @@ minio/credentials/*
 
 # Metabase Data
 metabase/metadata/*
+
+# DuckDB
+duckdb/*
