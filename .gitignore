@@ -8,3 +8,6 @@ airflow/plugins/*
 # Minio Data
 minio/data/*
 minio/credentials/*
+
+# Metabase Data
+metabase/metadata/*
