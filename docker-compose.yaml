@@ -8,8 +8,12 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./duckdb/:/duckdb/ 
-      - ./metabase/:/metabase/
+      - type: bind
+        source: ./duckdb/
+        target: /duckdb/ 
+      - type: bind
+        source: ./metabase/
+        target: /metabase/
     environment:
       - MB_DB_FILE=/metabase/metadata/metabase.db
     mem_limit: 2GB
