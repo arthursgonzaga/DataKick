@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   metabase:
     build:
@@ -17,3 +16,17 @@ services:
     environment:
       - MB_DB_FILE=/metabase/metadata/metabase.db
     mem_limit: 2GB
+
+  minio:
+    build:
+      context: ./minio  
+      dockerfile: Dockerfile 
+    container_name: minio
+    ports:
+      - 9000:9000
+      - 9001:9001
+    volumes:
+      - ./minio/data:/data
+    environment:
+      - MINIO_CONFIG_ENV_FILE=/etc/config.env
+    command: server /data --console-address :9001
