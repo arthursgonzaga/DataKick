@@ -16,3 +16,6 @@ metabase/metadata/*
 
 # DuckDB
 duckdb/*
+
+# Data Drop
+datadrop/uploads/*

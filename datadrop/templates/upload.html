@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CSV</title>
+</head>
+<body>
+    <h1>Upload CSV para S3</h1>
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <label for="table_name">Nome da Tabela:</label>
+        <input type="text" id="table_name" name="table_name" required>
+        <br><br>
+        <label for="file">Arquivo CSV:</label>
+        <input type="file" id="file" name="file" accept=".csv" required>
+        <br><br>
+        <button type="submit">Enviar</button>
+    </form>
+    <p style="color: red;">{{ get_flashed_messages()[0] }}</p>
+</body>
+</html>
