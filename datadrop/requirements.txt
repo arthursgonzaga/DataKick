@@ -1,0 +1,4 @@
+flask
+flask-wtf
+boto3
+python-dotenv
