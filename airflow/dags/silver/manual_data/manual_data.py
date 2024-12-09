@@ -112,8 +112,6 @@ def manual_data_transform():
             print(f'Closing connection')
             conn.close()
 
-        transform_data(source_table_name, source_file_name, destination_table_name, query)
-
         @task(task_id=f"data_quality_tests_{destination_table_name}")
         def data_quality_tests(destination_table_name):
             s3_path = f"{destination_path}/{destination_table_name}.parquet"
@@ -122,7 +120,8 @@ def manual_data_transform():
             default_data_quality(conn, s3_path)
             conn.close()
 
-        data_quality_tests(destination_table_name)
+        transform_task = transform_data(source_table_name, source_file_name, destination_table_name, query)
+        quality_task = data_quality_tests(destination_table_name)
+        transform_task >> quality_task
             
-
 manual_data_transform()
