@@ -14,6 +14,7 @@ def _duckdb_config(conn_duckdb):
     MINIO_ACCESS_KEY = minio_config.get('aws_access_key_id')
     MINIO_SECRET_KEY = minio_config.get('aws_secret_access_key')
     MINIO_ENDPOINT = minio_config.get('endpoint_url')
+    MINIO_ENDPOINT = MINIO_ENDPOINT.removeprefix("http://")
 
     config_query = f"""
         INSTALL httpfs;
@@ -65,6 +66,7 @@ def load_query(dag_path, table_name):
 def manual_data_transform():
 
     dag_path = "/opt/airflow/dags/silver/manual_data"
+    source_path = "s3://bronze/datadrop" # s3://bronze/datadrop/kaggle/database.csv
     config = read_table_config(f"{dag_path}/config.yaml")
     tables = config.get('tables', {})
     for key, value in tables.items():
@@ -75,11 +77,14 @@ def manual_data_transform():
 
         @task(task_id=f"transform_{destination_table_name}")
         def transform_data(source_table_name, source_file_name, destination_table_name, query):
-            print(f"Processing table: {destination_table_name}")
-            print(f"Query: {query}")
-            print(f"Source Table: {source_table_name}, Source File: {source_file_name}")
 
+            s3_path = f"{source_path}/{source_table_name}/{source_file_name}"
+            query = query.format(s3_path = s3_path)
 
+            conn = duckdb.connect()
+            _duckdb_config(conn)
+            conn.sql(query).show()
+            conn.close()
 
         transform_data(source_table_name, source_file_name, destination_table_name, query)
 
