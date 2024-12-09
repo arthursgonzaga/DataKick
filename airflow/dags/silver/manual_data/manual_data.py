@@ -67,6 +67,7 @@ def manual_data_transform():
 
     dag_path = "/opt/airflow/dags/silver/manual_data"
     source_path = "s3://bronze/datadrop" # s3://bronze/datadrop/kaggle/database.csv
+    destination_path = "s3://silver/datadrop"
     config = read_table_config(f"{dag_path}/config.yaml")
     tables = config.get('tables', {})
     for key, value in tables.items():
@@ -79,11 +80,17 @@ def manual_data_transform():
         def transform_data(source_table_name, source_file_name, destination_table_name, query):
 
             s3_path = f"{source_path}/{source_table_name}/{source_file_name}"
-            query = query.format(s3_path = s3_path)
+            query = query.format(s3_path = s3_path, destination_table_name = destination_table_name)
 
             conn = duckdb.connect()
             _duckdb_config(conn)
-            conn.sql(query).show()
+            print(f'Creating in-memory table {destination_table_name}...')
+            conn.sql(query)
+
+            print(f'Save table {destination_table_name} on storage...')
+            conn.sql(f"COPY (SELECT * FROM {destination_table_name}) TO '{destination_path}/{destination_table_name}.parquet' (FORMAT 'parquet');")
+
+            print(f'Closing connection')
             conn.close()
 
         transform_data(source_table_name, source_file_name, destination_table_name, query)

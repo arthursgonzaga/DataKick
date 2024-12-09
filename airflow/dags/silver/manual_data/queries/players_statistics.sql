@@ -1,4 +1,5 @@
 
+CREATE TABLE {destination_table_name} AS
 SELECT
     Jogador AS player,
     Time AS team,
@@ -33,4 +34,4 @@ SELECT
     Tent AS dribbles_attempted,
     Suc AS dribbles_successful,
     Data AS updated_date
-FROM read_csv_auto('{s3_path}')
+FROM read_csv_auto('{s3_path}');
