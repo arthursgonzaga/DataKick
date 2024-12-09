@@ -1,0 +1,5 @@
+---
+tables:
+  players_statistics:
+    table_name: kaggle
+    file_name: database.csv
