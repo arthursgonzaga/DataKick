@@ -19,3 +19,6 @@ duckdb/*
 
 # Data Drop
 datadrop/uploads/*
+
+# Testes
+notebooks/temp/*
