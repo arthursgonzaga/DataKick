@@ -110,6 +110,6 @@ def fetch_api_futebol_data():
     
     response = fetch_match_index(championship)
     load_index_to_s3(response)
-    fetch_match_data(response)
+    fetch_match_data(response, round='1a-rodada')
 
 fetch_api_futebol_data()
