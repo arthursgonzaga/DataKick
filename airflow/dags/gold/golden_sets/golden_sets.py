@@ -1,11 +1,22 @@
 from datetime import datetime
 from airflow.decorators import dag, task
 from airflow.hooks.base import BaseHook
+from airflow.utils.email import send_email
 import duckdb
 import json
 import yaml
 import os
 import pandas as pd
+
+def failure_email(context):
+    task_instance = context['task_instance']
+    task_status = 'Failed'
+    subject = f'Airflow Task {task_instance.task_id} {task_status}'
+    body = f'The task {task_instance.task_id} completed with status : {task_status}. \n\n'\
+        f'The task execution date is: {context["execution_date"]}\n'\
+        f'Log url: {task_instance.log_url}\n\n'
+    to_email = 'arthursgonzaga@gmail.com' #recepient mail
+    send_email(to = to_email, subject = subject, html_content = body)
 
 def _duckdb_config(conn_duckdb):
     connection = BaseHook.get_connection("minio_default")
@@ -57,9 +68,6 @@ def load_query(dag_path, table_name):
     schedule_interval=None,
     start_date=datetime(2024, 11, 10),
     catchup=False,
-    default_args={
-        "retries": 3,
-    },
     tags=["TRANSFORMATION", "GOLD"],
 )
 
@@ -77,7 +85,10 @@ def data_transform():
         source_file_name = value.get('file_name')      
         query = load_query(dag_path, destination_table_name)
 
-        @task(task_id=f"transform_{destination_table_name}")
+        @task(
+            task_id=f"transform_{destination_table_name}",      
+            on_failure_callback = failure_email
+        )
         def transform_data(source_table_name, source_file_name, destination_table_name, query):
 
             s3_path = f"{source_path}/{source_table_name}/{source_file_name}"
