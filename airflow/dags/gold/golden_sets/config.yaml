@@ -1,0 +1,5 @@
+---
+tables:
+  golden_set_campeonato_brasileiro:
+    table_name: api_futebol
+    file_name: 'matches_stats.parquet'
