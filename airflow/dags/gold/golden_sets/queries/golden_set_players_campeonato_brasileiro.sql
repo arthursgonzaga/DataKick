@@ -1,5 +1,5 @@
 CREATE TABLE {destination_table_name} AS
-WITH last_position AS (
+WITH position AS (
     SELECT
         player,
         team,
@@ -7,9 +7,16 @@ WITH last_position AS (
     FROM 
         read_parquet('{s3_path}')
     GROUP BY player, team, position, updated_date
+),
+last_position AS (
+    SELECT
+        player,
+        team,
+        position
+    FROM 
+        position
+    GROUP BY player, team, position
 )
-
-
 
 SELECT 
     b.player,
