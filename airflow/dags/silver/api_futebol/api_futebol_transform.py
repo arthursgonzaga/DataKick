@@ -52,43 +52,25 @@ def load_query(dag_path, table_name):
         print(f"Erro: Arquivo de query '{query_path}' não encontrado.")
         return None
 
-def default_data_quality(conn_duckdb, file_path):
-    conn_duckdb.execute(f"CREATE TABLE dataset AS SELECT * FROM '{file_path}'")
-    result = conn_duckdb.sql("SELECT column_name FROM (DESCRIBE dataset)").fetchdf()
-    column_names = result['column_name'].tolist()
-
-    # Data Quality for Null Values
-    for column in column_names:
-        null_test_query = f"""
-            SELECT 
-                '{column}' AS column_name,
-                COUNT(*) AS total_rows,
-                SUM(CASE WHEN {column} IS NULL THEN 1 ELSE 0 END) AS null_count,
-                (SUM(CASE WHEN {column} IS NULL THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS null_percentage
-            FROM dataset
-        """
-        conn_duckdb.sql(null_test_query).show()
-        # null_test_result['Test'] = 'Null Check'
-        # quality_results = pd.concat([quality_results, null_test_result.rename(columns={'column_name': 'Column'})], ignore_index=True)
-
 @dag(
-    dag_id="manual_data_transform",
+    dag_id="api_futebol_transform",
     schedule_interval=None,
     start_date=datetime(2024, 11, 10),
     catchup=False,
     default_args={
         "retries": 3,
     },
-    tags=["MANUAL_DATA", "TRANSFORMATION", "SILVER"],
+    tags=["API_FUTEBOL", "TRANSFORMATION", "SILVER"],
 )
 
-def manual_data_transform():
+def data_transform():
 
-    dag_path = "/opt/airflow/dags/silver/manual_data"
-    source_path = "s3://bronze/datadrop" # s3://bronze/datadrop/kaggle/database.csv
-    destination_path = "s3://silver/datadrop"
+    dag_path = "/opt/airflow/dags/silver/api_futebol"
+    source_path = "s3://bronze/api_futebol"
+    destination_path = "s3://silver/api_futebol"
     config = read_table_config(f"{dag_path}/config.yaml")
     tables = config.get('tables', {})
+
     for key, value in tables.items():
         destination_table_name = key
         source_table_name = value.get('table_name')
@@ -101,6 +83,8 @@ def manual_data_transform():
             s3_path = f"{source_path}/{source_table_name}/{source_file_name}"
             query = query.format(s3_path = s3_path, destination_table_name = destination_table_name)
 
+            print(query)
+
             conn = duckdb.connect()
             _duckdb_config(conn)
             print(f'Creating in-memory table {destination_table_name}...')
@@ -112,16 +96,7 @@ def manual_data_transform():
             print(f'Closing connection')
             conn.close()
 
-        @task(task_id=f"data_quality_tests_{destination_table_name}")
-        def data_quality_tests(destination_table_name):
-            s3_path = f"{destination_path}/{destination_table_name}.parquet"
-            conn = duckdb.connect()
-            _duckdb_config(conn)
-            default_data_quality(conn, s3_path)
-            conn.close()
-
         transform_task = transform_data(source_table_name, source_file_name, destination_table_name, query)
-        quality_task = data_quality_tests(destination_table_name)
-        transform_task >> quality_task
+        transform_task
             
-manual_data_transform()
+data_transform()

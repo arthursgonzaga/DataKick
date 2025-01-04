@@ -17,7 +17,7 @@ def _get_credentials():
 
 @dag(
     dag_id="api_futebol_extraction",
-    schedule_interval="0 0 * * *",  # Executa diariamente à meia-noite
+    schedule_interval=None,
     start_date=datetime(2024, 11, 10),
     catchup=False,
     default_args={

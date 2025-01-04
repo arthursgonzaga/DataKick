@@ -6,6 +6,7 @@ __pycache__
 # Airflow Itens
 airflow/logs/*
 airflow/plugins/*
+airflow/config/airflow.cfg
 
 # Minio Data
 minio/data/*

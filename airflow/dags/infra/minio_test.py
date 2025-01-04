@@ -4,6 +4,7 @@ from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 
 @dag(
     start_date=datetime(2024, 11, 10),
+    schedule_interval=None,
     catchup=False,
     tags=["INFRA"]
 )

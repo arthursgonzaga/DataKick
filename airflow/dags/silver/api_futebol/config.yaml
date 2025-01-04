@@ -1,0 +1,5 @@
+---
+tables:
+  matches_stats:
+    table_name: campeonato_brasileiro
+    file_name: '*/*.json'

@@ -1,0 +1,8 @@
+---
+tables:
+  golden_set_teams_campeonato_brasileiro:
+    table_name: api_futebol
+    file_name: 'matches_stats.parquet'
+  golden_set_players_campeonato_brasileiro:
+    table_name: datadrop
+    file_name: players_statistics.parquet
