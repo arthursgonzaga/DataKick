@@ -1,5 +1,5 @@
 ---
 tables:
   players_statistics:
-    table_name: kaggle
+    table_name: brasileiro_stats
     file_name: database.csv
