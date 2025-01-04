@@ -54,7 +54,7 @@ def load_query(dag_path, table_name):
 
 @dag(
     dag_id="api_futebol_transform",
-    schedule_interval="0 0 * * *",
+    schedule_interval=None,
     start_date=datetime(2024, 11, 10),
     catchup=False,
     default_args={

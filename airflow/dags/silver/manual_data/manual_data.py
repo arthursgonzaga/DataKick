@@ -73,7 +73,7 @@ def default_data_quality(conn_duckdb, file_path):
 
 @dag(
     dag_id="manual_data_transform",
-    schedule_interval="0 0 * * *",
+    schedule_interval=None,
     start_date=datetime(2024, 11, 10),
     catchup=False,
     default_args={
