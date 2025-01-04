@@ -41,9 +41,10 @@ default_args = {
 dag = DAG(
     'email_test',
     default_args = default_args,
-    description = 'description of your dag',
+    description = 'Dag for email test',
     schedule_interval = None, #you can set any schedule interval you want.
     catchup = False,
+    tags=["INFRA"]
 )
 
 #Define python operator to execute simple python command
