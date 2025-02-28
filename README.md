@@ -90,7 +90,7 @@ We welcome contributions! To contribute:
 
 For questions or suggestions, reach out:
 
-- 📧 Email: [youremail@email.com](mailto:arthursgonzaga@gmail.com)
+- 📧 Email: [arthursgonzaga@gmail.com](mailto:arthursgonzaga@gmail.com)
 - 🔗 LinkedIn: [linkedin.com/in/arthursgonzaga](https://linkedin.com/in/arthursgonzaga)
 
 ---
